@@ -14,7 +14,7 @@ This is a work in progress, contributions are more than welcome.
 
 Unless you are lucky enough to live in a place that has strict data privacy laws (such as the European Union), your data is never truly gone. Its safe to assume that, unless facebook is legally obligated through a court order, they will never ever delete your data. Your data will always be associated with you through many different metrics of linking all that you have posted, liked, commented and tagged for as long as facebook is able to maintain the infrastructure to store the data (i.e. forever).
 
-With my background as a systems administrator and full stack developer, I can only imagine all the geographically redundant and multi-layered offsite data backup and data shipping that happens behind the scenes at facebook. They have more than enough resources to tie your data up on many servers across many data cenres around the globe. All transparent to you. You will never truly know that your data is without a doubt deleted.
+With my background as a systems administrator and full stack developer, I can only imagine all the geographically redundant and multi-layered offsite data backup and data shipping that happens behind the scenes at facebook. They have more than enough resources to tie your data up on many servers across many data centres around the globe. All transparent to you. You will never truly know that your data is without a doubt deleted.
 
 #### Why obfuscate and poison the data? Why not just delete the posts?
 
