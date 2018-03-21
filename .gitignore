@@ -2,3 +2,4 @@ offline-data/*
 offline-data/
 *.png
 config.json
+.DS_Store
