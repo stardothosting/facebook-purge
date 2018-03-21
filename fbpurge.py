@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 ###########################
 if len(sys.argv) != 2 :
         print "\nUsage Syntax :"
-        print "\nfbpurge.py <username> <password> <postid>"
+        print "\nfbpurge.py <username> <password> <userid> <postid>"
         sys.exit(0)
 
 br = mechanize.Browser()
@@ -30,7 +30,8 @@ br.addheaders = [ ( 'User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.
 # Declare Variables
 user = sys.argv[0]
 passwd = sys.argv[1] 
-post_id = sys.argv[2]
+user_id = sys.argv[2]
+post_id = sys.argv[3]
 url = "https://m.facebook.com/login.php"
 
 #Open URL and submit
@@ -41,8 +42,11 @@ br.form['pass'] = passwd
 br.submit()
 
 #response = br.open("https://www.facebook.com/")
-response = br.open("https://www.facebook.com//posts/" + post_id)
+#response = br.open("https://www.facebook.com//posts/" + post_id)
+response = br.open("https://m.facebook.com/story.php?story_fbid=" + user_id + "&id=" + post_id)
 
+https://m.facebook.com/edit/post/dialog/?cid=S%3A_I1429340672%3A47455157912&ct=2&nodeID=m_story_permalink_view&redir=%2Fstory_chevron_menu%2F%3Fis_menu_registered%3Dfalse&perm&loc=permalink&m_sess=&__dyn=1KQdAmm3u69U-4UpwGzWAgy8xfKl3oS9xGi5EO9wHwAxu3-UcodUvzE6u7HwlEf8lwJwro8oy1qwNwUx65of8apFo5K0XUK2O1gCwSxu0BU7W1KxO1TBxOeyE98eE5W5o&__req=c&__ajax__=AYkKLsQhTVX80xu7Ztr9W9icq9iUp51XQBc1v2P2xIIaw6INfpaFvVsF5yzQ9WENVQLZhTpdBkBcypfZ9j284nuV8uJ2fWLvR1676rPP1rq9Xg&__user=1429340672
+ + post_id
 bs = BeautifulSoup(response, "lxml")
 
 #for editLink in bs.find_all('a', attrs={'data-feed-option-name' : 'FeedEditOption'}):

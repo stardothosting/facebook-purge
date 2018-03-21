@@ -1,2 +1,4 @@
 offline-data/*
 offline-data/
+*.png
+config.json
