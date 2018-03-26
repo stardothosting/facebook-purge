@@ -1,5 +1,7 @@
 offline-data/*
 offline-data/
 *.png
+*.jpg
+*.gif
 config.json
 .DS_Store

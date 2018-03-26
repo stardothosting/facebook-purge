@@ -8,7 +8,6 @@ var casper = require('casper').create({
             loadPlugins: false,         // do not load NPAPI plugins (Flash, Silverlight, ...)
             webSecurityEnabled: false // ajax 
     },
-    //clientScripts: ['jquery-3.3.1.min.js']
 });
 
 // Get user arguments
@@ -16,7 +15,7 @@ var utils = require("utils");
 var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
-var waitTime = 3000;
+var waitTime = 2000;
 var thePost = "https://www.facebook.com/story.php?story_fbid=47455157912&id=1429340672";
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 
