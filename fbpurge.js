@@ -35,10 +35,10 @@ casper.then(function(){
 casper.then(function(){
     this.waitForSelector("#pagelet_composer", function pass () {
         console.log("Logged In Successfully");
-        //this.capture('AfterLogin.png');
+        this.capture('AfterLogin.png');
     }, function fail () {
         console.log("did not Log In");
-        //this.capture('login.png');
+        this.capture('login.png');
     }, 10000); // timeout limit in milliseconds
 });
 
@@ -47,8 +47,18 @@ var thePost = "https://www.facebook.com/story.php?story_fbid=47455157912&id=1429
 casper.thenOpen(thePost, function() {
     this.evaluate(function() {
         console.log("At the right post");
-        document.querySelectorAll('#u_0_x')[0].click();
+        //document.querySelectorAll('#u_0_y')[0].click();
+        //document.querySelectorAll('#u_0_y')[0].click();
+        //document.querySelectorAll('a')[0].click();
+        //document.getElementById("u_0_y")[0].click();
+        
     });
+});
+
+casper.waitForSelector('#u_0_y', function() {
+    this.click('#u_0_y');
+},function(){
+    this.echo('failed founding #nocaptcha', 'INFO');
 });
  
 //Wait to be redirected to the Home page, and then make a screenshot
