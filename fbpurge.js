@@ -1,11 +1,14 @@
 var casper = require('casper').create({
     verbose: true,
-    logLevel: "debug",
-    loadImages: false,
-    loadPlugins: false,
+    logLevel: "error",
+
     pageSettings: {
-            userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24"
-    }
+            userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
+            loadImages:  true,          // do not load images
+            loadPlugins: false,         // do not load NPAPI plugins (Flash, Silverlight, ...)
+            webSecurityEnabled: false // ajax 
+    },
+    //clientScripts: ['jquery-3.3.1.min.js']
 });
 
 // Get user arguments
@@ -13,9 +16,11 @@ var utils = require("utils");
 var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
-//var poid = casper.cli.get("postid");
-
+var waitTime = 3000;
+var thePost = "https://www.facebook.com/story.php?story_fbid=47455157912&id=1429340672";
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
+
+// Facebook Authenticate
 casper.start().thenOpen(config['urls']['loginUrl'], function() {
     console.log(username);
     console.log("Facebook website opened");
@@ -43,31 +48,45 @@ casper.then(function(){
 });
 
 //go to the facebook post
-var thePost = "https://www.facebook.com/story.php?story_fbid=47455157912&id=1429340672";
-casper.thenOpen(thePost, function() {
-    this.evaluate(function() {
-        console.log("At the right post");
-        //document.querySelectorAll('#u_0_y')[0].click();
-        //document.querySelectorAll('#u_0_y')[0].click();
-        //document.querySelectorAll('a')[0].click();
-        //document.getElementById("u_0_y")[0].click();
-        
-    });
+casper.thenOpen(thePost, function _waitAfterStart() {
+    casper.wait(waitTime, function() {});
 });
 
-casper.waitForSelector('#u_0_y', function() {
-    this.click('#u_0_y');
+casper.waitForSelector('a[data-testid="post_chevron_button"]', function _waitAfterClick() {
+    //this.evaluate(function () { jq = $.noConflict(true) } ); 
+    this.click('a[data-testid="post_chevron_button"]');
 },function(){
-    this.echo('failed founding #nocaptcha', 'INFO');
+    this.echo('failed to click feed edit menu', 'INFO');
 });
- 
+
+casper.then(function _waitAfterClick() {
+    casper.wait(waitTime, function() {});
+});
+
 //Wait to be redirected to the Home page, and then make a screenshot
 casper.then(function(){
-    console.log("Make a screenshot and save it as AfterLogin.png");
-	this.wait(6000);//Wait a bit so page loads (there are a lot of ajax calls and that is why we are waiting 6 seconds)
+    console.log("Make a screenshot of feed edit menu");
+    casper.wait(waitTime, function() {});
     this.capture('AfterLogin2.png');
 });
 
+casper.waitForSelector('a[data-feed-option-name="FeedEditOption"]', function _waitAfterClick() {
+    //this.evaluate(function () { jq = $.noConflict(true) } ); 
+    this.click('a[data-feed-option-name="FeedEditOption"]');
+},function(){
+    this.echo('failed to click feed edit link', 'INFO');
+});
+
+casper.then(function _waitAfterClick() {
+    casper.wait(waitTime, function() {});
+});
+
+//Wait to be redirected to the Home page, and then make a screenshot
+casper.then(function(){
+    console.log("Make a screenshot of feed edit screen");
+	casper.wait(waitTime, function() {});
+    this.capture('AfterLogin3.png');
+});
 
 casper.run(function() {
     this.exit();
