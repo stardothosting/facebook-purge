@@ -1,22 +1,23 @@
 var casper = require('casper').create({
     verbose: true,
     logLevel: "error",
-
     pageSettings: {
             userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
             loadImages:  true,          // do not load images
             loadPlugins: false,         // do not load NPAPI plugins (Flash, Silverlight, ...)
-            webSecurityEnabled: false // ajax 
+            webSecurityEnabled: false   // ajax 
     },
 });
 
-// Get user arguments
+// Declare variables and user arguments
 var utils = require("utils");
 var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
+var post_id = casper.cli.get("postid"); // story_fbid=
+var user_id = casper.cli.get("userid"); // id=
+var thePost = "https://www.facebook.com/story.php?story_fbid=" + post_id + "&id=" + user_id;
 var waitTime = 2000;
-var thePost = "https://www.facebook.com/story.php?story_fbid=47455157912&id=1429340672";
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 
 // Facebook Authenticate
@@ -46,13 +47,12 @@ casper.then(function(){
     }, 10000); // timeout limit in milliseconds
 });
 
-//go to the facebook post
+//Go to the facebook post
 casper.thenOpen(thePost, function _waitAfterStart() {
     casper.wait(waitTime, function() {});
 });
 
 casper.waitForSelector('a[data-testid="post_chevron_button"]', function _waitAfterClick() {
-    //this.evaluate(function () { jq = $.noConflict(true) } ); 
     this.click('a[data-testid="post_chevron_button"]');
 },function(){
     this.echo('failed to click feed edit menu', 'INFO');
@@ -62,13 +62,14 @@ casper.then(function _waitAfterClick() {
     casper.wait(waitTime, function() {});
 });
 
-//Wait to be redirected to the Home page, and then make a screenshot
+//Take a screenshot
 casper.then(function(){
     console.log("Make a screenshot of feed edit menu");
     casper.wait(waitTime, function() {});
     this.capture('AfterLogin2.png');
 });
 
+//Click the post edit link
 casper.waitForSelector('a[data-feed-option-name="FeedEditOption"]', function _waitAfterClick() {
     //this.evaluate(function () { jq = $.noConflict(true) } ); 
     this.click('a[data-feed-option-name="FeedEditOption"]');
@@ -80,7 +81,7 @@ casper.then(function _waitAfterClick() {
     casper.wait(waitTime, function() {});
 });
 
-//Wait to be redirected to the Home page, and then make a screenshot
+//Take a screenshot
 casper.then(function(){
     console.log("Make a screenshot of feed edit screen");
 	casper.wait(waitTime, function() {});
