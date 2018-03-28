@@ -28,8 +28,8 @@ When you are satisfied, then you can delete the post.
 
 You need to install [http://casperjs.org/](CasperJS). You can follow the instructions on their site, or you can run the following (assuming you have node installed) :
 
- npm install casperjs
- node_modules/casperjs/bin/casperjs selftest
+```npm install casperjs
+node_modules/casperjs/bin/casperjs selftest```
 
 ## How do you use the script
 
@@ -47,7 +47,7 @@ This would be the password to login to facebook.
 
 This is the "story_fbid" URL parameter passed when viewing a story. If you view a single post on facebook and look at the url bar, it should look something like this :
 
- https://www.facebook.com/story.php?story_fbid=9999&id=8888
+`https://www.facebook.com/story.php?story_fbid=9999&id=8888`
 
 In the above example, the postid would be "9999"
 
@@ -57,7 +57,7 @@ This can be grabbed in a more intelligent version of the script , but currently 
 
 So a full example of the script would look like :
 
- casperjs fbpurge.js --user="you@whatever.com" --pass='password' --postid='9999' --userid='8888'
+`casperjs fbpurge.js --user="you@whatever.com" --pass='password' --postid='9999' --userid='8888'`
 
 ## How does the script work
 
