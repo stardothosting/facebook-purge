@@ -90,7 +90,6 @@ casper.thenOpen(thePost, function _waitAfterStart() {
     casper.wait(waitTime, function() {});
 });
 
-// Desktop
 casper.waitForSelector('div[data-sigil="story-popup-causal-init"]', function _waitAfterClick() {
     this.click('div[data-sigil="story-popup-causal-init"] a[data-sigil="touchable"]');
 },function(){
