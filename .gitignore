@@ -4,5 +4,7 @@ offline-data/
 *.jpg
 *.gif
 *.txt
+*.html
+*.json
 config.json
 .DS_Store
