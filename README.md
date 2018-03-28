@@ -28,8 +28,10 @@ When you are satisfied, then you can delete the post.
 
 You need to install [http://casperjs.org/](CasperJS). You can follow the instructions on their site, or you can run the following (assuming you have node installed) :
 
-```npm install casperjs
-node_modules/casperjs/bin/casperjs selftest```
+```
+npm install casperjs
+node_modules/casperjs/bin/casperjs selftest
+```
 
 ## How do you use the script
 
