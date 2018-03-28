@@ -137,27 +137,13 @@ casper.then(function(){
 * Change post content *
 **********************/
 casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfterClick() {
-    //this.evaluate(function () { jq = $.noConflict(true) } ); 
-    //this.click('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
-    //document.queryselectorAll('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').value = random_post;
-    console.log('Trying to edit and submit form ...');
+    this.evaluate(function () { jq = $.noConflict(true) } ); 
+    console.log('Trying to edit and submit form : ' + random_post);
     this.mouse.move('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
-    this.sendKeys('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]', random_post);
-    //this.click('button.btn.btnI.bgb.mfss.touchable');
-    /*this.evaluate(function(random_post) {
+    this.mouse.click('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
+    this.evaluate(function(random_post) {
         $('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').text(random_post);
-        document.queryselectorAll('form[data-sigil="m-edit-post-form"]').submit();
-        var js = this.evaluate(function() {
-            return document;
-        });
-        fs.write('results.html', this.getPageContent()); 
-
-    }, random_post)
-
-    this.thenEvaluate(function() {
-        document.querySelector('form[data-sigil="m-edit-post-form"]').submit();
-    });*/
-
+    }, random_post);
 },function(){
     this.echo('failed to click feed edit link', 'INFO');
 });
@@ -171,28 +157,10 @@ casper.then(function _waitAfterClick() {
 * Save changed post content *
 *****************************/
 casper.then(function() {
-
-    //this.click('button.btn.btnI.bgb.mfss.touchable');
-    //this.mouse.move('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
-    //this.mouse.move('button.btn.btnI.bgb.mfss.touchable');
-    //this.mouse.down('button.btn.btnI.bgb.mfss.touchable');
-    //this.mouse.up('button.btn.btnI.bgb.mfss.touchable');
-    //this.mouse.click('button.btn.btnI.bgb.mfss.touchable');
     this.mouse.move("#u_6_3");
     this.mouse.down("#u_6_3");
     this.mouse.up("#u_6_3");
     this.mouse.click("#u_6_3");
-    //this.click('#u_6_3');
-    /*this.evaluate(function(){
-    document.getElementById("u_6_3").click();
-    });*/
-
-    var js = this.evaluate(function() {
-        return document;
-    });
-    //this.echo(js.all[0].outerHTML);
-    fs.write('results.json', this.getPageContent()); 
-    fs.write('test.html', js.all[0].outerHTML);
 })
 
 casper.then(function _waitAfterClick() {
@@ -200,39 +168,6 @@ casper.then(function _waitAfterClick() {
     this.capture('AfterLogin7.png');
 });
 
-//Take a screenshot
-casper.then(function(){
-    console.log("Make a screenshot of feed edit save box again");
-    casper.wait(waitTime, function() {});
-    this.capture('AfterLogin8.png');
-});
-
-
-/*casper.then(function() {
-
-    //this.click(xpath('//*[contains(text(),"Save")]'));
-    this.clickLabel('Save');
-
-//    this.page.sendEvent("keydown", this.page.event.key.Control);
-//    this.page.sendEvent("keydown", this.page.event.key.Enter);
-
-
-},function(){
-    this.echo('failed to click feed edit link', 'INFO');
-});
-
-casper.then(function _waitAfterClick() {
-    console.log("Make a screenshot of feed edit save box in");
-    this.capture('AfterLogin7.png');
-});
-
-//Take a screenshot
-casper.then(function(){
-    console.log("Make a screenshot of feed edit save box again");
-    casper.wait(waitTime, function() {});
-    this.capture('AfterLogin8.png');
-});*/
-    
 casper.run(function() {
     this.exit();
 }); 
