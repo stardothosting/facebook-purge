@@ -101,13 +101,6 @@ casper.then(function _waitAfterClick() {
     casper.wait(waitTime, function() {});
 });
 
-//Take a screenshot
-casper.then(function(){
-    console.log("Make a screenshot of feed edit menu");
-    casper.wait(waitTime, function() {});
-    this.capture('AfterLogin2.png');
-});
-
 /*****************************
 * Click edit button for post *
 *****************************/
@@ -118,20 +111,6 @@ casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-
 },function(){
     this.echo('failed to click feed edit link', 'INFO');
 });
-
-casper.then(function _waitAfterClick() {
-    console.log("Make a screenshot of feed edit screen");
-    casper.wait(waitTime, function() {});
-    this.capture('AfterLogin3.png');
-});
-
-//Take a screenshot
-casper.then(function(){
-    console.log("Make a screenshot of feed edit screen");
-	casper.wait(waitTime, function() {});
-    this.capture('AfterLogin4.png');
-});
-
 
 /**********************
 * Change post content *
@@ -148,11 +127,6 @@ casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfte
     this.echo('failed to click feed edit link', 'INFO');
 });
 
-casper.then(function _waitAfterClick() {
-    console.log("Make a screenshot of feed edit box filled in");
-    this.capture('AfterLogin5.png');
-});
-
 /****************************
 * Save changed post content *
 *****************************/
@@ -165,7 +139,7 @@ casper.then(function() {
 
 casper.then(function _waitAfterClick() {
     console.log("Make a screenshot of feed edit save box in");
-    this.capture('AfterLogin7.png');
+    this.capture('After_Post_Edit.png');
 });
 
 casper.run(function() {
