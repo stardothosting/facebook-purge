@@ -8,3 +8,5 @@ offline-data/
 *.json
 config.json
 .DS_Store
+*.htm
+

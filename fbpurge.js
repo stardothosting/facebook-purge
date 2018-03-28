@@ -50,7 +50,7 @@ var password = casper.cli.get("pass");
 var post_id = casper.cli.get("postid"); // story_fbid=
 var user_id = casper.cli.get("userid"); // id=
 var thePost = "https://m.facebook.com/story.php?story_fbid=" + post_id + "&id=" + user_id;
-var waitTime = 3000;
+var waitTime = 4000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 var random_post = randomWord() + ' ' + randomWord() + ' ' + randomWord() + ' ' + randomWord();
 
@@ -127,14 +127,22 @@ casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfte
     this.echo('failed to click feed edit link', 'INFO');
 });
 
+casper.then(function _waitAfterClick() {
+    console.log("Make a screenshot of feed edit box filled in");
+    this.capture('AfterLogin5.png');
+});
 /****************************
 * Save changed post content *
 *****************************/
-casper.then(function() {
+casper.then(function _waitAfterClick() {
     this.mouse.move("#u_6_3");
     this.mouse.down("#u_6_3");
     this.mouse.up("#u_6_3");
     this.mouse.click("#u_6_3");
+    var js = this.evaluate(function() {
+        return document;
+    });
+    fs.write('results.html', this.getPageContent()); 
 })
 
 casper.then(function _waitAfterClick() {
