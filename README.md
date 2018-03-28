@@ -2,6 +2,8 @@
 ## By Shift8 Web
 ### [Toronto Web Design and Development](https://www.shift8web.ca)
 
+Note : This script is proof of concept. Use at your own risk. It is also a work in progress so contributions are very welcome.
+
 #### Overview 
 
 Facebook purge is a python script that utilizes the beautiful soup module to interact with a specific facebook post ID. The goal is a proof of concept to interact with your own facebook data in order to edit the data within the post.
@@ -22,5 +24,4 @@ This script can never be guaranteed to be 100% effective. What it can do is obfu
 
 When you are satisfied, then you can delete the post.
 
-
-## More to come : this is a work in progress, contributions welcome.
+#### How do you 
