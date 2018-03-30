@@ -6,7 +6,6 @@ offline-data/
 *.txt
 *.html
 *.json
-config.json
 .DS_Store
 *.htm
 
