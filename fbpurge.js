@@ -10,7 +10,7 @@ var casper = require('casper').create({
     pageSettings: {
             userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
             loadImages:  true,          // load images
-            loadPlugins: true,         // do not load NPAPI plugins (Flash, Silverlight, ...)
+            loadPlugins: true,         // load NPAPI plugins (Flash, Silverlight, ...)
             webSecurityEnabled: false   // allows for flexible ajax 
     },
     clientScripts: ['jquery-3.3.1.min.js']
