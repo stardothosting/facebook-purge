@@ -134,10 +134,10 @@ casper.then(function _waitAfterClick() {
 * Save changed post content *
 *****************************/
 casper.then(function _waitAfterClick() {
-    this.mouse.move("#u_6_3");
-    this.mouse.down("#u_6_3");
-    this.mouse.up("#u_6_3");
-    this.mouse.click("#u_6_3");
+    this.mouse.move('button[data-sigil="post-edit-save-button"]');
+    this.mouse.down('button[data-sigil="post-edit-save-button"]');
+    this.mouse.up('button[data-sigil="post-edit-save-button"]');
+    this.mouse.click('button[data-sigil="post-edit-save-button"]');
     var js = this.evaluate(function() {
         return document;
     });
