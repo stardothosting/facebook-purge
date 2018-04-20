@@ -6,7 +6,7 @@ Note : This script is proof of concept. Use at your own risk. It is also a work 
 
 ## Overview 
 
-Facebook purge is a python script that utilizes the beautiful soup module to interact with a specific facebook post ID. The goal is a proof of concept to interact with your own facebook data in order to edit the data within the post.
+Facebook purge is a javascript (CasperJS) solution that utilizes the beautiful soup module to interact with a specific facebook post ID. The goal is a proof of concept to interact with your own facebook data in order to edit the data within the post.
 
 If one were to choose to obfuscate that data over a period of time to allow the "poisoned" data to propagate throughout Facebook's infrastructure (replicated data centres, backups, etc) before permanently deleting the post, this script would be one way to accomplish such a feat. 
 
