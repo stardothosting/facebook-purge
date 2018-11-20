@@ -28,7 +28,7 @@ var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
 var user_id = casper.cli.get("userid"); // id=
-var theActivity = "https://m.facebook.com/" + user_id + "/allactivity?ref=bookmarks";
+var theActivity = "https://m.facebook.com/" + user_id + "/allactivity?log_filter=cluster_11&ref=bookmarks";
 var waitTime = 4000;
 var waitShortTime = 1000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.

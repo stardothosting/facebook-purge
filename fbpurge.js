@@ -9,6 +9,7 @@ var casper = require('casper').create({
     logLevel: "warning",
     pageSettings: {
             userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
+            //userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/603.1.23 (KHTML, like Gecko) Version/10.0 Mobile/14E5239e Safari/602.1",
             loadImages:  true,          // load images
             loadPlugins: true,         // load NPAPI plugins (Flash, Silverlight, ...)
             webSecurityEnabled: false   // allows for flexible ajax 
@@ -17,24 +18,23 @@ var casper = require('casper').create({
 
 });
 
+
 /************
 * Functions *
 ************/
-function randomWord(){
-    var vowels = ['a', 'e', 'i', 'o', 'u'];
-    var consts =  ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'qu', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', 'tt', 'ch', 'sh'];
-    var len = 8;
-    var word = '';
-    var is_vowel = false;
-    var arr;
 
-    for (var i = 0; i < len; i++) {
-      if (is_vowel) arr = vowels
-      else arr = consts
-      is_vowel = !is_vowel;
-      word += arr[Math.round(Math.random()*(arr.length-1))];
-    }
-    return word;
+function randomSentence() {
+    var uarticle = new Array("The", "A", " One", "Some", "Any");
+    var larticle = new Array("the", "a", "one", "some", "any");
+    var preposition = new Array("to", "from", "over", "under", "on");
+    var noun = fs.read('nouns.txt').split("\n");
+    var verb = fs.read('verbs.txt').split("\n");
+    var rand1 = Math.floor(Math.random() * uarticle.length);
+    var rand2 = Math.floor(Math.random() * noun.length);
+    var rand3 = Math.floor(Math.random() * verb.length);
+    var rand4 = Math.floor(Math.random() * larticle.length);
+    var rand5 = Math.floor(Math.random() * preposition.length);
+    return uarticle[rand1] + " " + noun[rand2] + " " + verb[rand3] + " " + preposition[rand5] + " " + larticle[rand4] + " " + noun[rand2] + ".";   
 }
 
 /***************************************
@@ -47,12 +47,17 @@ var mouse = require("mouse").create(casper);
 var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
-var post_id = casper.cli.get("postid"); // story_fbid=
-var user_id = casper.cli.get("userid"); // id=
-var thePost = "https://m.facebook.com/story.php?story_fbid=" + post_id + "&id=" + user_id;
+var post_id = casper.cli.raw.get("postid"); // story_fbid=
+var user_id = casper.cli.raw.get("userid"); // id=
+var thePost = "https://m.facebook.com/" + user_id + "/posts/" + post_id ;
+console.log('post id : ' + post_id);
+console.log('user id : ' + user_id);
 var waitTime = 4000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
-var random_post = randomWord() + ' ' + randomWord() + ' ' + randomWord() + ' ' + randomWord();
+var random_post = randomSentence();
+
+
+
 
 /***************************************
 * Login and authenticate with facebook *
@@ -94,6 +99,7 @@ casper.waitForSelector('div[data-sigil="story-popup-causal-init"]', function _wa
     this.click('div[data-sigil="story-popup-causal-init"] a[data-sigil="touchable"]');
 },function(){
     this.echo('failed to click feed edit menu', 'INFO');
+    this.capture('edit1.png');
 });
 
 casper.then(function _waitAfterClick() {
@@ -108,7 +114,8 @@ casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-
     this.click('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]');
     casper.wait(waitTime, function() {});
 },function(){
-    this.echo('failed to click feed edit link', 'INFO');
+    this.echo('failed to click feed edit link1', 'INFO');
+    this.capture('edit2.png');
 });
 
 /**********************
@@ -122,13 +129,14 @@ casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfte
     this.evaluate(function(random_post) {
         $('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').text(random_post);
     }, random_post);
+    casper.sendKeys('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]', random_post, { reset: true } );
 },function(){
-    this.echo('failed to click feed edit link', 'INFO');
+    this.echo('failed to click feed edit link2', 'INFO');
 });
 
 casper.then(function _waitAfterClick() {
     console.log("Make a screenshot of feed edit box filled in");
-    this.capture('AfterLogin5.png');
+    this.capture('edit_screen.png');
 });
 /****************************
 * Save changed post content *

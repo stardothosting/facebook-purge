@@ -8,3 +8,7 @@ offline-data/
 *.json
 .DS_Store
 *.htm
+*.swp
+convert.sh
+!nouns.txt
+!verbs.txt
