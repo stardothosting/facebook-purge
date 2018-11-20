@@ -29,12 +29,13 @@ function randomSentence() {
     var preposition = new Array("to", "from", "over", "under", "on");
     var noun = fs.read('nouns.txt').split("\n");
     var verb = fs.read('verbs.txt').split("\n");
-    var rand1 = Math.floor(Math.random() * uarticle.length);
-    var rand2 = Math.floor(Math.random() * noun.length);
-    var rand3 = Math.floor(Math.random() * verb.length);
-    var rand4 = Math.floor(Math.random() * larticle.length);
-    var rand5 = Math.floor(Math.random() * preposition.length);
-    return uarticle[rand1] + " " + noun[rand2] + " " + verb[rand3] + " " + preposition[rand5] + " " + larticle[rand4] + " " + noun[rand2] + ".";   
+    var uarticle_r = Math.floor(Math.random() * uarticle.length);
+    var noun_r1 = Math.floor(Math.random() * noun.length);
+    var noun_r2 = Math.floor(Math.random() * noun.length);
+    var verb_r = Math.floor(Math.random() * verb.length);
+    var larticle_r = Math.floor(Math.random() * larticle.length);
+    var preposition_r = Math.floor(Math.random() * preposition.length);
+    return uarticle[uarticle_r] + " " + noun[noun_r1] + " " + verb[verb_r] + " " + preposition[preposition_r] + " " + larticle[larticle_r] + " " + noun[noun_r2] + ".";   
 }
 
 /***************************************
@@ -48,15 +49,12 @@ var config = require("./config.json");
 var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
 var post_id = casper.cli.raw.get("postid"); // story_fbid=
+var post_id_file = casper.cli.raw.get("postid_file");
+var post_ids = fs.read(post_id_file).split("\n");
 var user_id = casper.cli.raw.get("userid"); // id=
-var thePost = "https://m.facebook.com/" + user_id + "/posts/" + post_id ;
-console.log('post id : ' + post_id);
-console.log('user id : ' + user_id);
-var waitTime = 4000;
+var waitTime = 5000;
+var quickWait = 200;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
-var random_post = randomSentence();
-
-
 
 
 /***************************************
@@ -88,74 +86,82 @@ casper.then(function(){
     }, 10000); // timeout limit in milliseconds
 });
 
-/**************************
-* Go to the facebook post *
-**************************/
-casper.thenOpen(thePost, function _waitAfterStart() {
-    casper.wait(waitTime, function() {});
-});
 
-casper.waitForSelector('div[data-sigil="story-popup-causal-init"]', function _waitAfterClick() {
-    this.click('div[data-sigil="story-popup-causal-init"] a[data-sigil="touchable"]');
-},function(){
-    this.echo('failed to click feed edit menu', 'INFO');
-    this.capture('edit1.png');
-});
+/* Wrapper for editing all posts */
+post_ids.forEach(function(single_id) {
+    var thePost = "https://m.facebook.com/" + user_id + "/posts/" + single_id ;
+    var random_post = randomSentence();
 
-casper.then(function _waitAfterClick() {
-    casper.wait(waitTime, function() {});
-});
-
-/*****************************
-* Click edit button for post *
-*****************************/
-casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]', function _waitAfterClick() {
-    //this.evaluate(function () { jq = $.noConflict(true) } ); 
-    this.click('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]');
-    casper.wait(waitTime, function() {});
-},function(){
-    this.echo('failed to click feed edit link1', 'INFO');
-    this.capture('edit2.png');
-});
-
-/**********************
-* Change post content *
-**********************/
-casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfterClick() {
-    this.evaluate(function () { jq = $.noConflict(true) } ); 
-    console.log('Trying to edit and submit form : ' + random_post);
-    this.mouse.move('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
-    this.mouse.click('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
-    this.evaluate(function(random_post) {
-        $('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').text(random_post);
-    }, random_post);
-    casper.sendKeys('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]', random_post, { reset: true } );
-},function(){
-    this.echo('failed to click feed edit link2', 'INFO');
-});
-
-casper.then(function _waitAfterClick() {
-    console.log("Make a screenshot of feed edit box filled in");
-    this.capture('edit_screen.png');
-});
-/****************************
-* Save changed post content *
-*****************************/
-casper.then(function _waitAfterClick() {
-    this.mouse.move('button[data-sigil="post-edit-save-button"]');
-    this.mouse.down('button[data-sigil="post-edit-save-button"]');
-    this.mouse.up('button[data-sigil="post-edit-save-button"]');
-    this.mouse.click('button[data-sigil="post-edit-save-button"]');
-    var js = this.evaluate(function() {
-        return document;
+    /**************************
+    * Go to the facebook post *
+    **************************/
+    casper.thenOpen(thePost, function _waitAfterStart() {
+        casper.wait(quickWait, function() {});
     });
-    fs.write('results.html', this.getPageContent()); 
-})
 
-casper.then(function _waitAfterClick() {
-    console.log("Make a screenshot of feed edit save box in");
-    this.capture('After_Post_Edit.png');
+    casper.waitForSelector('div[data-sigil="story-popup-causal-init"]', function _waitAfterClick() {
+        this.click('div[data-sigil="story-popup-causal-init"] a[data-sigil="touchable"]');
+    },function(){
+        this.echo('failed to click feed edit menu', 'INFO');
+        //this.capture('edit1.png');
+    });
+
+    casper.then(function _waitAfterClick() {
+        casper.wait(quickWait, function() {});
+    });
+
+    /*****************************
+    * Click edit button for post *
+    *****************************/
+    casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]', function _waitAfterClick() {
+        //this.evaluate(function () { jq = $.noConflict(true) } ); 
+        this.click('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]');
+        casper.wait(quickWait, function() {});
+    },function(){
+        this.echo('failed to click feed edit link1', 'INFO');
+        //this.capture('edit2.png');
+    });
+
+    /**********************
+    * Change post content *
+    **********************/
+    casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfterClick() {
+        this.evaluate(function () { jq = $.noConflict(true) } ); 
+        console.log('Trying to edit and submit form : ' + random_post + ' FBID : ' + single_id);
+        this.mouse.move('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
+        this.mouse.click('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
+        this.evaluate(function(random_post) {
+            $('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').text(random_post);
+        }, random_post);
+        casper.sendKeys('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]', random_post, { reset: true } );
+    },function(){
+        this.echo('failed to click feed edit link2', 'INFO');
+    });
+
+    casper.then(function _waitAfterClick() {
+        console.log("Edit box filled in..");
+        //this.capture('edit_screen.png');
+    });
+    /****************************
+    * Save changed post content *
+    *****************************/
+    casper.then(function _waitAfterClick() {
+        this.mouse.move('button[data-sigil="post-edit-save-button"]');
+        this.mouse.down('button[data-sigil="post-edit-save-button"]');
+        this.mouse.up('button[data-sigil="post-edit-save-button"]');
+        this.mouse.click('button[data-sigil="post-edit-save-button"]');
+        var js = this.evaluate(function() {
+            return document;
+        });
+        fs.write('results.html', this.getPageContent()); 
+    })
+
+    casper.then(function _waitAfterClick() {
+        console.log("Edit box saved..");
+        //this.capture('After_Post_Edit.png');
+    });
 });
+// end of foreach
 
 casper.run(function() {
     this.exit();
