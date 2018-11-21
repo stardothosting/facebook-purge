@@ -52,8 +52,10 @@ var post_id = casper.cli.raw.get("postid"); // story_fbid=
 var post_id_file = casper.cli.raw.get("postid_file");
 var post_ids = fs.read(post_id_file).split("\n");
 var user_id = casper.cli.raw.get("userid"); // id=
-var waitTime = 5000;
-var quickWait = 200;
+var waitMinTime = 6000;
+var waitMaxTime = 10000;
+var minWait = 2000;
+var maxWait = 5000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 
 
@@ -88,7 +90,16 @@ casper.then(function(){
 
 
 /* Wrapper for editing all posts */
-post_ids.forEach(function(single_id) {
+var forEach = require('async-foreach').forEach;
+post_ids.forEach(function(single_id, index) {
+    // Set random wait times to multiple variables to appear more organic
+    var quickWait_1 = Math.floor(Math.random() * maxWait) + minWait;
+    var quickWait_2 = Math.floor(Math.random() * maxWait) + minWait;
+    var quickWait_3 = Math.floor(Math.random() * maxWait) + minWait;
+    var quickWait_4 = Math.floor(Math.random() * maxWait) + minWait;
+    var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
+
+    // Set post url and random post message
     var thePost = "https://m.facebook.com/" + user_id + "/posts/" + single_id ;
     var random_post = randomSentence();
 
@@ -96,7 +107,7 @@ post_ids.forEach(function(single_id) {
     * Go to the facebook post *
     **************************/
     casper.thenOpen(thePost, function _waitAfterStart() {
-        casper.wait(quickWait, function() {});
+        casper.wait(quickWait_1, function() {});
     });
 
     casper.waitForSelector('div[data-sigil="story-popup-causal-init"]', function _waitAfterClick() {
@@ -107,7 +118,7 @@ post_ids.forEach(function(single_id) {
     });
 
     casper.then(function _waitAfterClick() {
-        casper.wait(quickWait, function() {});
+        casper.wait(quickWait_2, function() {});
     });
 
     /*****************************
@@ -116,7 +127,7 @@ post_ids.forEach(function(single_id) {
     casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]', function _waitAfterClick() {
         //this.evaluate(function () { jq = $.noConflict(true) } ); 
         this.click('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]');
-        casper.wait(quickWait, function() {});
+        casper.wait(quickWait_3, function() {});
     },function(){
         this.echo('failed to click feed edit link1', 'INFO');
         //this.capture('edit2.png');
@@ -127,13 +138,14 @@ post_ids.forEach(function(single_id) {
     **********************/
     casper.waitForSelector('form[data-sigil="m-edit-post-form"]', function _waitAfterClick() {
         this.evaluate(function () { jq = $.noConflict(true) } ); 
-        console.log('Trying to edit and submit form : ' + random_post + ' FBID : ' + single_id);
+        console.log('Trying to edit and submit form : ' + random_post + ' FBID : ' + single_id + ' random wait time : ' + quickWait);
         this.mouse.move('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
         this.mouse.click('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]');
         this.evaluate(function(random_post) {
             $('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]').text(random_post);
         }, random_post);
         casper.sendKeys('textarea[data-sigil="m-edit-post-text-area m-textarea-input"]', random_post, { reset: true } );
+        casper.wait(quickWait_4, function() {});
     },function(){
         this.echo('failed to click feed edit link2', 'INFO');
     });
@@ -158,6 +170,7 @@ post_ids.forEach(function(single_id) {
 
     casper.then(function _waitAfterClick() {
         console.log("Edit box saved..");
+        casper.wait(waitTime, function() {});
         //this.capture('After_Post_Edit.png');
     });
 });
