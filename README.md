@@ -30,6 +30,7 @@ You need to install [http://casperjs.org/](CasperJS). You can follow the instruc
 
 ```
 npm install casperjs
+npm install async-foreach
 node_modules/casperjs/bin/casperjs selftest
 ```
 
@@ -59,7 +60,13 @@ This can be grabbed in a more intelligent version of the script , but currently 
 
 So a full example of the script would look like :
 
-`casperjs fbpurge.js --user="you@whatever.com" --pass='password' --postid='9999' --userid='8888'`
+`casperjs fbpurge.js --user="you@whatever.com" --pass='password' --postid='9999' --userid='8888' --postid_file='/Users/johnsmith/fb/ids.txt'`
+
+### Post IDs
+
+Currently the script can accept a list of facebook post IDs as a text file list. One ID per line, plain text. Simply pass the following argument to the script :
+
+`--postid_file='/Users/johnsmith/fb/ids.txt'`
 
 ## How does the script work
 
