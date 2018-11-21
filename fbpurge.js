@@ -64,7 +64,6 @@ var waitMaxTime = 10000;
 var minWait = 2000;
 var maxWait = 5000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
-
 var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
 
 /***************************************

@@ -14,3 +14,4 @@ offline-data/
 convert.sh
 !nouns.txt
 !verbs.txt
+!user_agents.txt
