@@ -32,9 +32,9 @@ function randomUserAgent() {
 }
 
 function randomSentence() {
-    var uarticle = new Array("The", "A", " One", "Some", "Any");
-    var larticle = new Array("the", "a", "one", "some", "any");
-    var preposition = new Array("to", "from", "over", "under", "on");
+    var uarticle = new Array("The", "A", " One", "Some", "Any", "This", "That", "An", "Such", "What", "Rather", "Quite");
+    var larticle = new Array("the", "a", "one", "some", "any", "this", "that", "an", "such", "what", "rather", "quite");
+    var preposition = new Array("to", "from", "over", "under", "on", "of", "with", "at", "into", "including", "unil", "against", "among", "throughout", "despite", "towards", "upon", "concerning");
     var noun = fs.read('nouns.txt').split("\n");
     var verb = fs.read('verbs.txt').split("\n");
     var uarticle_r = Math.floor(Math.random() * uarticle.length);
@@ -46,6 +46,18 @@ function randomSentence() {
     return uarticle[uarticle_r] + " " + noun[noun_r1] + " " + verb[verb_r] + " " + preposition[preposition_r] + " " + larticle[larticle_r] + " " + noun[noun_r2] + ".";   
 }
 
+var parseQueryString = function( queryString ) {
+    var params = {}, queries, temp, i, l;
+    // Split into key/value pairs
+    queries = queryString.split("&");
+    // Convert the array of strings into an object
+    for ( i = 0, l = queries.length; i < l; i++ ) {
+        temp = queries[i].split('=');
+        params[temp[0]] = temp[1];
+    }
+    return params;
+};
+
 /***************************************
 * Declare variables and user arguments *
 ***************************************/
@@ -56,13 +68,15 @@ var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
 var post_id = casper.cli.raw.get("postid"); // story_fbid=
 var post_id_file = casper.cli.raw.get("postid_file");
-var post_ids = fs.read(post_id_file).split("\n");
+if (post_id_file) {
+    var post_ids = fs.read(post_id_file).split("\n");
+}
 var user_id = casper.cli.raw.get("userid"); // id=
 var action = casper.cli.raw.get("action"); // get the intended action
 var waitMinTime = 6000;
 var waitMaxTime = 10000;
-var minWait = 2000;
-var maxWait = 5000;
+var minWait = 9000;
+var maxWait = 12000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
 
@@ -92,13 +106,14 @@ casper.then(function(){
     }, function fail () {
         console.log("did not Log In");
         this.capture('login.png');
-    }, 20000); // timeout limit in milliseconds
+    //}, waitTime); // timeout limit in milliseconds
+    });
 });
 
-// If we are wiping posts'
+// Load include dependent on action argument
 casper.then(function() {
     if (action == 'postgrab') {
-        console.log('Grab post IDs');
+        phantom.injectJs('./includes/fb_postgrab.js');
     } else if (action == 'commentgrab') {
         console.log('Grab comment IDs');
     } else if (action == 'taggrab') {
