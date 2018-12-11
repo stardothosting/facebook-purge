@@ -27,9 +27,9 @@ post_ids.forEach(function(single_id, index) {
         console.log('quickwait1 : ' + quickWait_1);
     });
 
-    casper.then(function _waitAfterClick() {
-        casper.wait(quickWait_2, function() {});
-    });
+    //casper.then(function _waitAfterClick() {
+    //    casper.wait(quickWait_2, function() {});
+    //});
 
     /*****************************
     * Click edit button for post *
@@ -37,7 +37,7 @@ post_ids.forEach(function(single_id, index) {
     casper.waitForSelector('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]', function _waitAfterClick() {
         //this.evaluate(function () { jq = $.noConflict(true) } ); 
         this.click('a[data-sigil="touchable touchable editPostButton dialog-link enabled_action"]');
-        casper.wait(quickWait_3, function() {});
+        //casper.wait(quickWait_3, function() {});
     },function(){
         this.echo('failed to click feed edit link1', 'INFO');
         //this.capture('edit2.png');
@@ -75,12 +75,21 @@ post_ids.forEach(function(single_id, index) {
         var js = this.evaluate(function() {
             return document;
         });
-        fs.write('results.html', this.getPageContent()); 
+        //fs.write('results.html', this.getPageContent()); 
     })
 
-    casper.then(function _waitAfterClick() {
-        console.log("Edit box saved..");
-        casper.wait(waitTime, function() {});
-        //this.capture('After_Post_Edit.png');
+    /*****************************
+    * Make sure content is saved *
+    *****************************/
+    casper.waitForSelector('div[data-sigil="m-feed-story-attachments-element"]', function() {
+        var edit_check = casper.fetchText('div[data-ad-preview="message"]');
+        if (edit_check != random_post) {
+            casper.echo('Edited text does not match after refresh.. exiting');
+            casper.echo('Edit check text : ' + edit_check);
+            casper.echo('Entered text : ' + random_post);
+            this.exit();
+        } else {
+            console.log("Edit box saved and verified..");
+        }
     });
 });
