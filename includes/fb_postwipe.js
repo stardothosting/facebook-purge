@@ -87,6 +87,7 @@ post_ids.forEach(function(single_id, index) {
             casper.echo('Edited text does not match after refresh.. exiting');
             casper.echo('Edit check text : ' + edit_check);
             casper.echo('Entered text : ' + random_post);
+            fw.write('purged_ids.txt', single_id);
             this.exit();
         } else {
             console.log("Edit box saved and verified..");

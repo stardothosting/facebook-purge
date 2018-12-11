@@ -11,6 +11,7 @@ offline-data/
 .DS_Store
 *.htm
 *.swp
+purged_ids.txt
 convert.sh
 !nouns.txt
 !verbs.txt
