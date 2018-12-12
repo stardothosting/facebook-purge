@@ -83,16 +83,17 @@ var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
 /***************************************
 * Login and authenticate with facebook *
 ***************************************/
-casper.start().thenOpen(config['urls']['loginUrl'], function() {
+//casper.start().thenOpen(config['urls']['loginUrl'], function() {
+casper.start().thenOpen('https://m.facebook.com/login/?ref=dbl&fl', function() {
     console.log(username);
     console.log("Facebook website opened");
 });
 
 casper.then(function(){
     this.evaluate(function(username, password){
-        document.getElementById("email").value = username;
-        document.getElementById("pass").value = password;
-        document.querySelectorAll('input[type="submit"]')[0].click();
+        document.getElementById("m_login_email").value = username;
+        document.getElementById("m_login_password").value = password;
+        document.querySelectorAll('button[data-sigil="touchable m_login_button"]')[0].click();
     },{
         username : username,
         password : password
@@ -100,7 +101,7 @@ casper.then(function(){
 });
 
 casper.then(function(){
-    this.waitForSelector("#pagelet_composer", function pass () {
+    this.waitForSelector('div[data-sigil="context-layer-root content-pane"]', function pass () {
         console.log("Logged In Successfully");
         this.capture('AfterLogin.png');
     }, function fail () {
