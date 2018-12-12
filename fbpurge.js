@@ -10,8 +10,8 @@ var casper = require('casper').create({
     verbose: true,
     logLevel: "warning",
     pageSettings: {
-            //userAgent: randomUserAgent(),
-            userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
+            userAgent: randomUserAgent(),
+            //userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.34 Safari/534.24",
             loadImages:  true,          // load images
             loadPlugins: true,         // load NPAPI plugins (Flash, Silverlight, ...)
             webSecurityEnabled: false   // allows for flexible ajax 
@@ -28,6 +28,8 @@ var casper = require('casper').create({
 function randomUserAgent() {
     var userAgents = fs.read('user_agents.txt').split("\n");
     var userAgent_r = Math.floor(Math.random() * userAgents.length);
+    console.log('User agent : ' + userAgents[userAgent_r]);
+    console.log('User agent r : ' + userAgent_r);
     return userAgents[userAgent_r];
 }
 
@@ -83,7 +85,6 @@ var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
 /***************************************
 * Login and authenticate with facebook *
 ***************************************/
-//casper.start().thenOpen(config['urls']['loginUrl'], function() {
 casper.start().thenOpen('https://m.facebook.com/login/?ref=dbl&fl', function() {
     console.log(username);
     console.log("Facebook website opened");
@@ -100,15 +101,29 @@ casper.then(function(){
     });
 });
 
+casper.then(function _waitAfterClick() {
+    casper.wait(waitTime, function() {});
+});
+
 casper.then(function(){
-    this.waitForSelector('div[data-sigil="context-layer-root content-pane"]', function pass () {
+    var cookies = phantom.cookies;
+    var logged_in = null;
+    for( var i = 0, len = cookies.length; i < len; i++ ) {
+        //console.log('cookies : ' + JSON.stringify(cookies[i]['name']));
+        if( cookies[i]['name'] === 'c_user' ) {
+            logged_in = cookies[i]['value'];
+            break;
+        }
+    }
+    // We want the c_user facebook cookie with the value to equal our user id
+    if (logged_in === user_id) {
         console.log("Logged In Successfully");
         this.capture('AfterLogin.png');
-    }, function fail () {
+    } else {
         console.log("did not Log In");
         this.capture('login.png');
-    //}, waitTime); // timeout limit in milliseconds
-    });
+        this.exit();
+    }
 });
 
 // Load include dependent on action argument
