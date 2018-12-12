@@ -29,6 +29,7 @@ When you are satisfied, then you can delete the post.
 You need to install [http://casperjs.org/](CasperJS). You can follow the instructions on their site, or you can run the following (assuming you have node installed) :
 
 ```
+npm install phantomjs
 npm install casperjs
 npm install async-foreach
 node_modules/casperjs/bin/casperjs selftest
