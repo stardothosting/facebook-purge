@@ -26,7 +26,7 @@ When you are satisfied, then you can delete the post.
 
 ## Requirements for the script
 
-You need to install [http://casperjs.org/](CasperJS). You can follow the instructions on their site, or you can run the following (assuming you have node installed) :
+You need to install [CasperJS](http://casperjs.org/). You can follow the instructions on their site, or you can run the following (assuming you have node installed) :
 
 ```
 npm install phantomjs
