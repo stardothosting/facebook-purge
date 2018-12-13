@@ -109,7 +109,7 @@ casper.then(function(){
     var cookies = phantom.cookies;
     var logged_in = null;
     for( var i = 0, len = cookies.length; i < len; i++ ) {
-        //console.log('cookies : ' + JSON.stringify(cookies[i]['name']));
+        console.log('cookies : ' + JSON.stringify(cookies[i]['name']));
         if( cookies[i]['name'] === 'c_user' ) {
             logged_in = cookies[i]['value'];
             break;
