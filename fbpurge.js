@@ -70,15 +70,18 @@ var username = casper.cli.get("user");
 var password = casper.cli.get("pass");
 var post_id = casper.cli.raw.get("postid"); // story_fbid=
 var post_id_file = casper.cli.raw.get("postid_file");
+// Force single ids or multiple ids to go through same forEach
 if (post_id_file) {
     var post_ids = fs.read(post_id_file).split("\n");
+} else {
+    var post_ids = [ post_id ];
 }
 var user_id = casper.cli.raw.get("userid"); // id=
 var action = casper.cli.raw.get("action"); // get the intended action
 var waitMinTime = 6000;
 var waitMaxTime = 10000;
-var minWait = 9000;
-var maxWait = 12000;
+var minWait = 3000;
+var maxWait = 6000;
 var wallUrl = config['urls']['loginUrl'] + username.split('@')[0];  // Assuming the email id is your facebook page vanity url.
 var waitTime = Math.floor(Math.random() * waitMaxTime) + waitMinTime;
 
