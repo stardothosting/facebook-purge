@@ -1,0 +1,75 @@
+// DISCLAIMER: I'VE ONLY RUN THIS SCRIPT ON MY OWN ACCOUNT ONLY. PROCEED/USE WITH RISK! I MADE THIS SCRIPT IN 20 MINUTES SO BE WARNED!
+// On the other hand, I've deleted 50,000 comments in a matter of minutes so it's been pretty damn handy
+
+// 1. Go to Activity feed, like facebook.com/<username>/allactivity
+// 2. Navigate to specific section of FB, like "Likes and Reactions" or "Comments", 
+// like https://www.facebook.com/<username>/allactivity?privacy_source=activity_log&log_filter=cluster_<clusterid>
+// 3. Navigate to year that you want to batch delete. You may need to scroll a little bit to let it load
+// 4. Once you enter this there's no going back!!
+
+
+// deletes, hides, and unlikes posts all within a specific year (in options.year)
+function delete_hide_unlike(options) {
+  var rows = document.querySelectorAll('#facebook #year_' + options.year + ' ._42fu');
+  for (var k = rows.length - 1; k >= options.limit; k--) {
+    var row = rows[k];
+    var rowButton = row.click();
+    var editButtons = document.querySelectorAll('._54nh');
+    for (var j = editButtons.length - 1; j >= options.limit; j--) {
+      var editButton = editButtons[j];
+      if (!editButton) {
+        console.log('Nope!');
+        break;
+      }
+      if (editButton.textContent == 'Delete') {
+        editButton.click();  // COMMENT OUT IF YOU WANT TO TEST IT OUT WITHOUT ACTUALY DELETING
+        console.log("DELETED");
+      } else if (editButton.textContent == 'Hidden from timeline') {
+        editButton.click();   // COMMENT OUT IF YOU WANT TO TEST IT OUT WITHOUT ACTUALY DELETING
+        console.log("HIDDEN");
+      } else if (editButton.textContent == 'Unlike') {
+        editButton.click();   // COMMENT OUT IF YOU WANT TO TEST IT OUT WITHOUT ACTUALY DELETING
+        console.log("UNLIKE");
+      } else {
+        console.log("IGNORED")
+      }
+    }
+  }
+}
+var options = {
+  year: '2007',
+  limit: 0, // use 1000 if you want to throttle how much to delete
+}
+delete_hide_unlike(options);
+
+
+// unlikes and deletes anything that is globally public, by year (set in options.year)
+function unlike_delete_globally_public_posts(options) {
+  var rows = document.querySelectorAll('#year_' + options.year + ' *[aria-label="Public"]')
+  for (var i = 0; i < rows.length; i++) {
+    var global_like = rows[i]
+    var likeButton = global_like.parentElement.parentElement.parentElement.querySelector('._42fu')
+    likeButton.click();
+    var editButtons = document.querySelectorAll('._54nh');
+    for (var j = editButtons.length - 1; j >= options.limit; j--) {
+      var editButton = editButtons[j];
+      if (!editButton) {
+        console.log('Nope!');
+        break;
+      } else if (editButton.textContent == 'Delete') {
+        editButton.click(); // COMMENT OUT IF YOU WANT TO TEST IT OUT WITHOUT ACTUALY DELETING
+        console.log("DELETED");
+      } else if (editButton.textContent == 'Unlike') {
+        editButton.click(); // COMMENT OUT IF YOU WANT TO TEST IT OUT WITHOUT ACTUALY DELETING
+        console.log("UNLIKE");
+      } else {
+        console.log("No action")
+      }
+    }
+  }
+}
+var options = {
+  year: '2009',
+  limit: 0 // use 1000 if you want to throttle it
+}
+unlike_delete_globally_public_posts(options)
